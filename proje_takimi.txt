@@ -1,0 +1,12 @@
+NESNEYE YÖNELİK PROGRAMLAMA PROJE ÖDEVİ
+Proje Konusu : Hastane Planlama Sistemi
+Grup No      : [GRUP NO]
+GitHub       : https://github.com/betulyldrmm/hastane-planlama
+
+Öğrenci No     | Ad Soyad          | Görevi
+---------------|-------------------|------------------------------------------------------------
+[ÖĞRENCİ NO]   | Betül Yıldırım    | Proje yöneticisi; mimari tasarım, ameliyat çizelgeleme algoritması, UML diyagramı
+[ÖĞRENCİ NO]   | [AD SOYAD]        | Model katmanı (Kisi, Hasta, Doktor, Ameliyat sınıfları), kapsülleme ve kalıtım
+[ÖĞRENCİ NO]   | [AD SOYAD]        | Öncelik stratejileri (Strateji ve Dekoratör kalıpları), muayene kuyruğu
+[ÖĞRENCİ NO]   | [AD SOYAD]        | JSON ile kalıcı veri saklama (Repository kalıbı), Hasta fabrikası
+[ÖĞRENCİ NO]   | [AD SOYAD]        | Konsol arayüzü, birim testleri, README ve sunum videosu

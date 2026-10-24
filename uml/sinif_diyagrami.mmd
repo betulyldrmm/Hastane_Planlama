@@ -1,0 +1,167 @@
+classDiagram
+    direction TB
+
+    class Kisi {
+        <<abstract>>
+        -String id
+        -String ad
+        -String soyad
+        +tamAd() String
+        +rolAciklamasi()* String
+    }
+    class Hasta {
+        <<abstract>>
+        -int yas
+        -String sikayet
+        -LocalDateTime kayitZamani
+        -HastaDurumu durum
+        +temelOncelikPuani()* int
+        +turAdi()* String
+        +muayeneEdildi()
+        +ameliyatPlanlandi()
+        +ameliyatErtelendi()
+    }
+    class AcilHasta {
+        -TriajSeviyesi triaj
+        +temelOncelikPuani() int
+    }
+    class PoliklinikHasta {
+        -Brans brans
+        -boolean randevulu
+        +temelOncelikPuani() int
+    }
+    class Doktor {
+        -Brans brans
+        -boolean cerrah
+        +ameliyatYapabilirMi(Brans) boolean
+    }
+    class Ameliyathane {
+        -String kod
+        -boolean aktif
+        +devreDisiBirak()
+        +aktifEt()
+    }
+    class Ameliyat {
+        -String id
+        -String hastaId
+        -Brans brans
+        -int sureDakika
+        -AmeliyatDurumu durum
+        -String doktorId
+        -String ameliyathaneKodu
+        -LocalDateTime baslangic
+        +planla(doktorId, salonKodu, baslangic)
+        +ertele()
+        +zamanAraligi() ZamanAraligi
+    }
+    class ZamanAraligi {
+        -LocalDateTime baslangic
+        -LocalDateTime bitis
+        +cakisirMi(ZamanAraligi) boolean
+    }
+
+    class OncelikStratejisi {
+        <<interface>>
+        +puanHesapla(Hasta, LocalDateTime) int
+        +ad() String
+    }
+    class StandartOncelikStratejisi {
+        +puanHesapla(Hasta, LocalDateTime) int
+    }
+    class KorunanGrupOncelikDekoratoru {
+        -OncelikStratejisi icStrateji
+        +puanHesapla(Hasta, LocalDateTime) int
+    }
+
+    class HastaFabrikasi {
+        -IdUretici idUretici
+        +olustur(HastaTuru, ...) Hasta
+    }
+    class IdUretici {
+        -String onek
+        -int sayac
+        +sonrakiId() String
+    }
+
+    class VeriOkuyucu {
+        <<interface>>
+        +yukle() HastaneVerisi
+    }
+    class VeriYazici {
+        <<interface>>
+        +kaydet(HastaneVerisi)
+    }
+    class VeriDeposu {
+        <<interface>>
+    }
+    class JsonVeriDeposu {
+        -Path dosyaYolu
+        -Gson gson
+    }
+    class BellekVeriDeposu
+    class HastaneVerisi {
+        -List~Hasta~ hastalar
+        -List~Doktor~ doktorlar
+        -List~Ameliyathane~ ameliyathaneler
+        -List~Ameliyat~ ameliyatlar
+    }
+
+    class MuayeneKuyrugu {
+        -OncelikStratejisi strateji
+        +oncelikSirasi(hastalar, simdi) List~Hasta~
+        +siradakiHasta(hastalar, simdi) Optional~Hasta~
+    }
+    class AmeliyatCizelgeleyici {
+        -OncelikStratejisi strateji
+        +planla(...) CizelgeSonucu
+    }
+    class CizelgeSonucu {
+        -List~Ameliyat~ planlananlar
+        -List~Ameliyat~ ertelenenler
+    }
+    class HastaneYonetimi {
+        -VeriDeposu depo
+        -OncelikStratejisi strateji
+        -Clock saat
+        +hastaKaydet(...) Hasta
+        +muayeneSirasi() List~Hasta~
+        +ameliyatlariPlanla(LocalDate) CizelgeSonucu
+        +ameliyathaneDurumuDegistir(kod, aktif)
+        +stratejiDegistir(OncelikStratejisi)
+    }
+    class KonsolArayuzu {
+        -HastaneYonetimi yonetim
+        +baslat()
+    }
+
+    Kisi <|-- Hasta
+    Kisi <|-- Doktor
+    Hasta <|-- AcilHasta
+    Hasta <|-- PoliklinikHasta
+
+    OncelikStratejisi <|.. StandartOncelikStratejisi
+    OncelikStratejisi <|.. KorunanGrupOncelikDekoratoru
+    KorunanGrupOncelikDekoratoru o-- OncelikStratejisi : sarar
+
+    VeriOkuyucu <|-- VeriDeposu
+    VeriYazici <|-- VeriDeposu
+    VeriDeposu <|.. JsonVeriDeposu
+    VeriDeposu <|.. BellekVeriDeposu
+
+    HastaFabrikasi --> IdUretici
+    HastaFabrikasi ..> Hasta : üretir
+    Ameliyat ..> ZamanAraligi
+    HastaneVerisi o-- Hasta
+    HastaneVerisi o-- Doktor
+    HastaneVerisi o-- Ameliyathane
+    HastaneVerisi o-- Ameliyat
+
+    HastaneYonetimi --> VeriDeposu
+    HastaneYonetimi --> OncelikStratejisi
+    HastaneYonetimi --> HastaFabrikasi
+    HastaneYonetimi ..> MuayeneKuyrugu
+    HastaneYonetimi ..> AmeliyatCizelgeleyici
+    AmeliyatCizelgeleyici ..> CizelgeSonucu
+    MuayeneKuyrugu --> OncelikStratejisi
+    AmeliyatCizelgeleyici --> OncelikStratejisi
+    KonsolArayuzu --> HastaneYonetimi
