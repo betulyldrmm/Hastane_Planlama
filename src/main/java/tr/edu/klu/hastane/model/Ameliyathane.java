@@ -10,7 +10,7 @@ public class Ameliyathane {
         if (kod == null || kod.isBlank()) {
             throw new IllegalArgumentException("Ameliyathane kodu boş olamaz.");
         }
-        this.kod = kod.trim().toUpperCase();
+        this.kod = kod.trim().toUpperCase(java.util.Locale.ROOT);
         this.aktif = true;
     }
 

@@ -91,7 +91,7 @@ public class HastaneYonetimi {
         if (hastaBul(hastaId).isEmpty()) {
             throw new IllegalArgumentException("Hasta bulunamadı: " + hastaId);
         }
-        Ameliyat ameliyat = new Ameliyat(ameliyatIdUretici.sonrakiId(), hastaId.toUpperCase(), brans, sureDakika);
+        Ameliyat ameliyat = new Ameliyat(ameliyatIdUretici.sonrakiId(), hastaId.toUpperCase(java.util.Locale.ROOT), brans, sureDakika);
         veri.getAmeliyatlar().add(ameliyat);
         kaydet();
         return ameliyat;

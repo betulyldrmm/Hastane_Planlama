@@ -34,10 +34,10 @@ public class HastaFabrikasi {
         String id = idUretici.sonrakiId();
         switch (tur) {
             case ACIL:
-                TriajSeviyesi triaj = TriajSeviyesi.valueOf(ekBilgi.trim().toUpperCase());
+                TriajSeviyesi triaj = TriajSeviyesi.valueOf(ekBilgi.trim().toUpperCase(java.util.Locale.ROOT));
                 return new AcilHasta(id, ad, soyad, yas, sikayet, kayitZamani, triaj);
             case POLIKLINIK:
-                String[] parcalar = ekBilgi.trim().toUpperCase().split(":");
+                String[] parcalar = ekBilgi.trim().toUpperCase(java.util.Locale.ROOT).split(":");
                 Brans brans = Brans.valueOf(parcalar[0]);
                 boolean randevulu = parcalar.length > 1 && parcalar[1].equals("R");
                 return new PoliklinikHasta(id, ad, soyad, yas, sikayet, kayitZamani, brans, randevulu);
